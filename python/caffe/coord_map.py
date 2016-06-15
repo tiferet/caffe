@@ -76,7 +76,7 @@ def coord_map(fn):
         axis -= 1  # -1 for last non-coordinate dim.
         return axis, 1, - offset
     else:
-        print("Encountered an unfamiliar layer: " + fn.type_name)
+        print("Error: Encountered an unfamiliar layer: " + fn.type_name)
         raise UndefinedMapException
 
 
@@ -93,16 +93,13 @@ def compose(base_map, next_map):
     with scale a2, shift b2. The scales multiply and the further shift, b2,
     is scaled by base coord scale a1.
     """
-    print "compose"
     ax1, a1, b1 = base_map
     ax2, a2, b2 = next_map
-    print ax1, a1, b1, ax2, a2, b2
     if ax1 is None:
         ax = ax2
     elif ax2 is None or ax1 == ax2:
         ax = ax1
     else:
-        print "AxisMismatchException"
         raise AxisMismatchException
     return ax, a1 * a2, a1 * b2 + b1
 
@@ -138,10 +135,6 @@ def coord_map_from_to(top_from, top_to):
         bottoms = top.fn.inputs
         if top.fn.type_name == 'Crop':
             bottoms = bottoms[:1]
-        if top.fn.type_name == 'Concat':
-            print "Concat layer bottoms:"
-            print (top.fn.inputs[0], top.fn.inputs[0].fn.type_name, top.fn.inputs[0].fn.params)
-            print (top.fn.inputs[1], top.fn.inputs[1].fn.type_name, top.fn.inputs[1].fn.params)
         return bottoms
 
     # walk back from top_from, keeping the coord map as we go
@@ -151,24 +144,11 @@ def coord_map_from_to(top_from, top_to):
         top = frontier.pop()
         try:
             bottoms = collect_bottoms(top)
-            print(11)
             for bottom in bottoms:
-                print(12)
                 from_maps[bottom] = compose(from_maps[top], coord_map(top.fn))
-                print(13)
                 frontier.add(bottom)
-                print(14)
-                print "Top-bottom pair:"
-                print (top, top.fn.type_name, top.fn.params)
-                print (bottom, bottom.fn.type_name, bottom.fn.params)
         except UndefinedMapException:
-            print "Exception reached"
             pass
-    print len(from_maps)
-    # for k, v in from_maps.items():
-    #     print k.fn.params
-    print [(k.fn.type_name, k.fn.params) for k, v in from_maps.items() if len(k.fn.params) > 0]
-    #print frontier
 
     # now walk back from top_to until we hit a common blob
     to_maps = {top_to: (None, 1, 0)}
@@ -176,11 +156,6 @@ def coord_map_from_to(top_from, top_to):
     while frontier:
         top = frontier.pop()
         if top in from_maps:
-            print "common ancestor: "
-            print top
-            print top.fn.type_name
-            print top.fn.params
-            print top.fn.ntop
             return compose(to_maps[top], inverse(from_maps[top]))
         try:
             bottoms = collect_bottoms(top)
@@ -189,8 +164,6 @@ def coord_map_from_to(top_from, top_to):
                 frontier.add(bottom)
         except UndefinedMapException:
             continue
-    print to_maps
-    #print frontier
 
     # if we got here, we did not find a blob in common
     raise RuntimeError('Could not compute map between tops; are they '
@@ -203,12 +176,6 @@ def crop(top_from, top_to):
     determining the coordinate mapping between the two and net spec'ing
     the axis and shift parameters of the crop.
     """
-    print "New crop:"
-    print top_from.fn.type_name
-    # print top_from.fn.inputs
-    # print top_from.fn.params
-    # print top_from.fn.tops
-    print top_to.fn.type_name
     ax, a, b = coord_map_from_to(top_from, top_to)
     assert (a == 1).all(), 'scale mismatch on crop (a = {})'.format(a)
     assert (b <= 0).all(), 'cannot crop negative offset (b = {})'.format(b)
