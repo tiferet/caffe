@@ -76,8 +76,7 @@ def coord_map(fn):
         axis -= 1  # -1 for last non-coordinate dim.
         return axis, 1, - offset
     else:
-        print("Error: Encountered an unfamiliar layer: " + fn.type_name)
-        raise UndefinedMapException
+        raise UndefinedMapException('UndefinedMapException: Encountered an unfamiliar layer: ' + fn.type_name)
 
 
 class AxisMismatchException(Exception):
@@ -147,8 +146,8 @@ def coord_map_from_to(top_from, top_to):
             for bottom in bottoms:
                 from_maps[bottom] = compose(from_maps[top], coord_map(top.fn))
                 frontier.add(bottom)
-        except UndefinedMapException:
-            pass
+        except UndefinedMapException as err:
+            print(err)
 
     # now walk back from top_to until we hit a common blob
     to_maps = {top_to: (None, 1, 0)}
@@ -162,7 +161,8 @@ def coord_map_from_to(top_from, top_to):
             for bottom in bottoms:
                 to_maps[bottom] = compose(to_maps[top], coord_map(top.fn))
                 frontier.add(bottom)
-        except UndefinedMapException:
+        except UndefinedMapException as err:
+            print(err)
             continue
 
     # if we got here, we did not find a blob in common
