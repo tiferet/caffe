@@ -6,6 +6,7 @@ import numpy as np
 import caffe
 from caffe.proto import caffe_pb2
 from caffe.gradient_check_util import GradientChecker
+from caffe_python_layers import WeightedSoftmaxWithLossLayer
 
 class TestGradientChecker(unittest.TestCase):
 
@@ -55,3 +56,26 @@ class TestGradientChecker(unittest.TestCase):
         checker = GradientChecker(1e-2, 1e-1)
         checker.check_gradient_exhaustive(
             layer, [self.bottom[0]], self.top, check_bottom=[0])
+
+
+
+    def test_weighted_softmax_loss(self):
+        lp = caffe_pb2.LayerParameter()
+        lp.type = "WeightedSoftmaxWithLossLayer"
+        #layer = caffe.create_layer(lp)
+        layer = WeightedSoftmaxWithLossLayer
+        layer.setup(self.bottom, self.top)
+        layer.Reshape(self.bottom, self.top)
+        layer.Forward(self.bottom, self.top)
+        # manual computation
+        loss = np.sum((self.bottom[0].data - self.bottom[1].data) ** 2) \
+               / self.bottom[0].shape[0] / 2.0
+        self.assertAlmostEqual(float(self.top[0].data), loss, 5)
+        checker = GradientChecker(1e-2, 1e-2)
+        checker.check_gradient_exhaustive(
+            layer, self.bottom, self.top, check_bottom='all')
+
+
+    def runTest(self):
+        self.setUp()
+        self.test_weighted_softmax_loss()
