@@ -101,4 +101,4 @@ MANIFEST-*
 *.sdf
 *.opensdf
 *.pdb
-*.props
+#*.props

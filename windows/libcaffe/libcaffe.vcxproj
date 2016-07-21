@@ -39,7 +39,7 @@
     <NuGetPackageImportStamp>0c91d16f</NuGetPackageImportStamp>
   </PropertyGroup>
   <ImportGroup Label="ExtensionSettings" Condition="'$(CpuOnlyBuild)'=='false'">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA $(CudaVersion).props" />
+    <Import Project="C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\BuildCustomizations\CUDA $(CudaVersion).props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -357,7 +357,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(SolutionDir)\CommonSettings.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Condition="'$(CpuOnlyBuild)'=='false'" Project="$(VCTargetsPath)\BuildCustomizations\CUDA $(CudaVersion).targets" />
+    <Import Condition="'$(CpuOnlyBuild)'=='false'" Project="C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\BuildCustomizations\CUDA $(CudaVersion).targets" />
     <Import Project="..\..\..\NugetPackages\OpenCV.2.4.10\build\native\OpenCV.targets" Condition="Exists('..\..\..\NugetPackages\OpenCV.2.4.10\build\native\OpenCV.targets')" />
     <Import Project="..\..\..\NugetPackages\OpenBLAS.0.2.14.1\build\native\openblas.targets" Condition="Exists('..\..\..\NugetPackages\OpenBLAS.0.2.14.1\build\native\openblas.targets')" />
     <Import Project="..\..\..\NugetPackages\hdf5-v120-complete.1.8.15.2\build\native\hdf5-v120.targets" Condition="Exists('..\..\..\NugetPackages\hdf5-v120-complete.1.8.15.2\build\native\hdf5-v120.targets')" />
