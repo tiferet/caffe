@@ -35,6 +35,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 7.5.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="Exists('$(SolutionDir)\CommonSettings.props')">
     <Import Project="$(SolutionDir)\CommonSettings.props" />
@@ -94,6 +95,7 @@
     <Import Project="..\..\..\NugetPackages\protobuf-v120.2.6.1\build\native\protobuf-v120.targets" Condition="Exists('..\..\..\NugetPackages\protobuf-v120.2.6.1\build\native\protobuf-v120.targets')" />
     <Import Project="..\..\..\NugetPackages\LevelDB-vc120.1.2.0.0\build\native\LevelDB-vc120.targets" Condition="Exists('..\..\..\NugetPackages\LevelDB-vc120.1.2.0.0\build\native\LevelDB-vc120.targets')" />
     <Import Project="..\..\..\NugetPackages\lmdb-v120-clean.0.9.14.0\build\native\lmdb-v120-clean.targets" Condition="Exists('..\..\..\NugetPackages\lmdb-v120-clean.0.9.14.0\build\native\lmdb-v120-clean.targets')" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 7.5.targets" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

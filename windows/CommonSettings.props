@@ -4,8 +4,8 @@
     <PropertyGroup Label="UserMacros">
         <BuildDir>$(SolutionDir)..\Build</BuildDir>
         <!--NOTE: CpuOnlyBuild and UseCuDNN flags can't be set at the same time.-->
-        <CpuOnlyBuild>true</CpuOnlyBuild>
-        <UseCuDNN>false</UseCuDNN>
+        <CpuOnlyBuild>false</CpuOnlyBuild>
+        <UseCuDNN>true</UseCuDNN>
         <CudaVersion>7.5</CudaVersion>
         <!-- NOTE: If Python support is enabled, PythonDir (below) needs to be
          set to the root of your Python installation. If your Python installation
@@ -21,7 +21,7 @@
         <CudaArchitecture>compute_35,sm_35;compute_52,sm_52</CudaArchitecture>
 
         <!-- CuDNN 3 and 4 are supported -->
-        <CuDnnPath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\cudnn-7.5-windows7-x64-v5.0-ga</CuDnnPath>
+        <CuDnnPath>D:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5</CuDnnPath>
         <ScriptsDir>$(SolutionDir)\scripts</ScriptsDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(CpuOnlyBuild)'=='false'">
